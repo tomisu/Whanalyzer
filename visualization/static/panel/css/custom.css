@@ -1,0 +1,42 @@
+#number-projects-nd {
+    font-size: 60px;
+}
+
+#total-donations-nd {
+    font-size: 60px;
+}
+
+.dc-chart g.row text {
+    fill: black;
+    font-size: 12px;
+}
+
+#wrapper{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#list-table{
+	width: 100%;
+	table-layout: fiexed;
+}
+
+#list-table, #list-table th, #list-table td {
+
+    border-collapse: collapse;
+}
+
+#list-table th, #list-table td {
+    padding: 1em;
+        border-bottom: 1px solid lightgrey;
+}
+
+.list-person{
+	cursor: pointer;
+}
+
+.list-person.active {
+    background-color: rgb(49, 130, 189);
+    color: white;
+}

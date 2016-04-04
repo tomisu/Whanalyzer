@@ -1,0 +1,131 @@
+{% load staticfiles %}
+<html>
+<head>
+  <title>Whanalyzer - Dashboard</title>
+  <link rel="stylesheet" href="{% static 'panel/lib/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'panel/lib/css/keen-dashboards.css' %}">
+  <link rel="stylesheet" href="{% static 'panel/lib/css/dc.css' %}">
+  <link rel="stylesheet" href="{% static 'panel/css/custom.css' %}">
+
+
+</head>
+<body class="application">
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="./">Whatsapp Analyzer Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+
+    <div id="wrapper">
+
+      <div class="col-sm-10">
+      
+          <!-- Time Chart --> 
+          <div class="col-sm-12">
+            <div class="chart-wrapper">
+              <div class="chart-title">
+                Dates
+              </div>
+              <div class="chart-stage">
+                <div id="edad-chart"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Time Chart --> 
+
+          
+          <div class="col-sm-12">
+            <!-- Fila 2 -->
+            <div class="row">
+              <!-- Publico Privado -->
+              <div class="col-sm-6">
+                <div class="chart-wrapper">
+                  <div class="chart-title">
+                    Users
+                  </div>
+                  <div class="chart-stage">
+                    <div id="sucesos-bar-chart"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+              <div class="chart-wrapper">
+                  <div class="chart-title">
+                    Hours
+                  </div>
+                  <div class="chart-stage">
+                    <div id="hours-line-chart"></div>
+                  </div>
+                </div>
+                <div class="chart-wrapper">
+                  <div class="chart-title">
+                    Day of the week
+                  </div>
+                  <div class="chart-stage">
+                    <div id="day-bar-chart"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>  
+
+          <!--- Fila 3 -->
+          <div class="col-sm-12">
+            <!-- Fila 2 -->
+            <div class="row">
+              <!-- Publico Privado -->
+              <div class="col-sm-126">
+              </div>
+              <div class="col-sm-12">
+                <div class="chart-wrapper">
+                  <div class="chart-title">
+                    Lista
+                  </div>
+                  <div class="chart-stage">
+                   <div id="lista-chart">
+                        <table id="list-table">
+                          <tr class="list-header">      
+                              <th class="date">Date</th>   
+                              <th class="time">Time</th>                     
+                              <th class="user">User</th>
+                              <th class="message">Message</th>
+                          </tr>
+                          </tr>
+                        </table>
+                  </div>
+                  </div>                 
+                </div>
+              </div>
+
+            </div>
+          </div>  
+
+      </div> <!--main col-->
+    </div> <!--wrapepr-->
+
+  </div>
+
+  </div>
+
+  <script language="javascript">var STATIC_URL = "{% static '' %}"</script>
+
+  <script src="{% static 'panel/lib/js/jquery.min.js' %}"></script>
+  <script src="{% static 'panel/lib/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'panel/lib/js/crossfilter.js' %}" type="text/javascript"></script>
+  <script src="{% static 'panel/lib/js/d3.js' %}"></script>
+  <script src="{% static 'panel/lib/js/dc.js' %}"></script>
+  <script src="{% static 'panel/lib/js/queue.js' %}" type="text/javascript"></script>
+  <script src="{% static 'panel/lib/js/keen.min.js' %}" type="text/javascript"></script>
+
+  <script src="{% static 'panel/js/utils.js' %}" type="text/javascript"></script>
+  <script src="{% static 'panel/js/reduce_functions.js' %}" type="text/javascript"></script>
+  <script src="{% static 'panel/js/graphs.js' %}" type="text/javascript"></script>
+
+</body>
+</html>
