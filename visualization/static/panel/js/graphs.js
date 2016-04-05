@@ -14,55 +14,86 @@ var numBySexo;
 var numByConcejo;
 
 //Charts
-var mapChart;
+var hoursLineChart;
+var usersRowChart;
+var dateBarChart;
+var dayBarChart;
+
+var charts = [];
 
 var personaActiva = -1;
-var maxConcejo = 0;
 
+var defaultMessageNumber = 10;
+var currentMessageNumber = defaultMessageNumber;
+var extraMessageNumber = 10;
 
 $(document).ready(function(){
 
-	
-	$("body").on('click', '.list-person', function(){		
-		
-		if($(this).hasClass("active")){
-			//Deselect person
-			personaActiva = -1;
-			idDim.filterAll();
-		} else{			
-			//Select person
-			var id =  $(this).attr("data-id");
-			personaActiva = id;		
-			idDim.filterFunction(function(d){
-				if (d == id){					
-					return d;
-				}
-			});			
-			
-		}
-		numByDate.reduceCount();
-		numByUser.reduceCount();
-		numBySexo.reduceCount();
-		numByConcejo.reduceCount();
-
-		updateRecords(idDim);
-		
-		dc.redrawAll();
-		
-	});
+	$("#more-bar").on('click', function(){
+		updateRecords(idDim, true);
+	})
 
 
 
 });
 
+$( window ).resize(function() {
+	resizeCharts();
+
+	
+});
+
+function endall(transition, callback) { 
+    if (transition.size() === 0) { callback() }
+    var n = 0; 
+    transition 
+        .each(function() { ++n; }) 
+        .each("end", function() { if (!--n) callback.apply(this, arguments); }); 
+  } 
+
+function resetDuration(chart, duration){
+	console.log("Reset duration of: " + chart);
+	//chart.transitionDuration(duration)
+}
+
+function getChartByAnchor(anchor){
+
+	var anchor = "#"+$(anchor).attr("id");
+	for (var i = 0; i < charts.length; i++){
+		if (charts[i].anchor() == anchor){
+			return charts[i];
+		}
+	}
+
+}
+
+function resizeCharts(){
+
+	for (var i = 0; i < charts.length; i++){
+		width = $(charts[i].anchor()).parent().width();
+		charts[i].width(width);
+		charts[i].transitionDuration(0);
+		//Reset animation to original value when the instant transtion ends
+		d3.select(charts[i].anchor()).transition().each( "end", function() {
+	            var chart = getChartByAnchor(this);
+	            chart.transitionDuration(chart.originalDuration);	
+	    });
+	}
+	dc.renderAll();
+}
 
 
-function updateRecords(dim){
+
+function updateRecords(dim, moreMessages){
 	var rowCode = '<tr class="list-person" data-id="##id##"><td class="date">##date##</td><td class="time">##time##</td><td class="user">##user##</td><td class="message">##message##</td></tr>';
 
-	dc.redrawAll();
+	if (moreMessages === undefined){
+		currentMessageNumber = defaultMessageNumber;
+	} else{
+		currentMessageNumber += extraMessageNumber;
+	}
 
-	allRecords = dim.bottom(50);
+	allRecords = dim.bottom(currentMessageNumber);
 
 	var table = $("#list-table");
 
@@ -98,10 +129,10 @@ function cleanData(datos){
 			continue;
 		}
 		var date = new Date(result[1]);
-		var hour = result[2];
-		var mins = result[3];
-		var name = result[4];
-		var message = result[5];
+		var hour = escapeHTML(result[2]);
+		var mins = escapeHTML(result[3]);
+		var name = escapeHTML(result[4]);
+		var message = escapeHTML(result[5]);
 
 		//Swap Sunday to last place
 		var dayIndex = date.getDay()-1;
@@ -130,7 +161,6 @@ function cleanData(datos){
 }
 
 function makeGraphs(error, datos, galiciaJson) {
-	
 	var twentysixers = 0;
 	
 	datos = cleanData(datos);
@@ -170,10 +200,10 @@ function makeGraphs(error, datos, galiciaJson) {
 	updateRecords(idDim);
 
     //Charts
-	var usersRowChart = dc.rowChart("#sucesos-bar-chart");
-	var dateBarChart = dc.lineChart("#edad-chart");
-	var hoursLineChart = dc.lineChart("#hours-line-chart");
-	var dayBarChart = dc.rowChart("#day-bar-chart");
+	usersRowChart = dc.rowChart("#sucesos-bar-chart");
+	dateBarChart = dc.lineChart("#edad-chart");
+	
+	dayBarChart = dc.rowChart("#day-bar-chart");
 
 	//Get the minimum non-0 age
 	
@@ -205,8 +235,10 @@ function makeGraphs(error, datos, galiciaJson) {
 		})
 		.yAxis().ticks(3);	
 
+	hoursLineChart = dc.lineChart("#hours-line-chart");
+	width = $("#hours-line-chart").parent().width();
 	hoursLineChart
-		.width(500)
+		.width( width)
 		.height(200)
 		.margins({top: 10, right: 50, bottom: 30, left: 50})
 		.dimension(hourDim)
@@ -247,6 +279,16 @@ function makeGraphs(error, datos, galiciaJson) {
 			updateRecords(idDim);			
 		})
         .xAxis().ticks(4);
+
+    charts.push(dateBarChart);
+    charts.push(hoursLineChart);
+    charts.push(usersRowChart);
+    charts.push(dayBarChart);
+
+    for (var i = 0; i < charts.length; i++){
+		charts[i].originalDuration = [charts[i].transitionDuration()].slice(0);
+	}
+
     dc.renderAll();
 
 };

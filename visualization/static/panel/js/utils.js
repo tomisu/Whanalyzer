@@ -15,3 +15,18 @@ function dateFormat(date){
  return date.getDate() + '/'+ (date.getMonth() + 1) + '/' +  date.getFullYear()
 
 }
+
+var escapeHTML = function(unsafe) {
+  return unsafe.replace(/[&<"']/g, function(m) {
+    switch (m) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '"':
+        return '&quot;';
+      default:
+        return '&#039;';
+    }
+  });
+};
